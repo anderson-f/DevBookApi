@@ -7,31 +7,31 @@ import (
 
 var routesUsers = []Route{
 	{
-		URI:                    "/usuarios",
+		URI:                    "/users",
 		Method:                 http.MethodPost,
 		Function:               controllers.CreateUser,
 		AuthenticationRequired: false,
 	},
 	{
-		URI:                    "/usuarios",
+		URI:                    "/users",
 		Method:                 http.MethodGet,
 		Function:               controllers.GetUsers,
 		AuthenticationRequired: false,
 	},
 	{
-		URI:                    "/usuarios/{usuarioId}",
+		URI:                    "/users/{usuarioId}",
 		Method:                 http.MethodGet,
 		Function:               controllers.GetUser,
 		AuthenticationRequired: false,
 	},
 	{
-		URI:                    "/usuarios/{usuarioId}",
+		URI:                    "/users/{usuarioId}",
 		Method:                 http.MethodPut,
 		Function:               controllers.UpdateUser,
 		AuthenticationRequired: false,
 	},
 	{
-		URI:                    "/usuarios/{usuarioId}",
+		URI:                    "/users/{usuarioId}",
 		Method:                 http.MethodDelete,
 		Function:               controllers.DeleteUser,
 		AuthenticationRequired: false,
