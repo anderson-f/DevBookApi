@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 // CreateUser receive the request and calls the repository to insert on database
@@ -48,7 +49,23 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 // GetUsers search all users on database
 func GetUsers(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Buscando todos usuários"))
+	nameOrUsername := strings.ToLower(r.URL.Query().Get("user"))
+
+	db, err := database.Connect()
+	if err != nil {
+		responses.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+	defer db.Close()
+
+	repository := repositories.NewUsersRepository(db)
+	users, err := repository.Search(nameOrUsername)
+	if err != nil {
+		responses.Error(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, users)
 }
 
 // GetUsers search one user on database
