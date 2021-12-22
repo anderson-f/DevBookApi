@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"api/src/security"
+
 	"github.com/badoux/checkmail"
 )
 
@@ -24,7 +26,9 @@ func (user *User) Prepare(stage string) error {
 		return err
 	}
 
-	user.cleanBorderSpaces()
+	if err := user.format(stage); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -52,8 +56,19 @@ func (user *User) validate(stage string) error {
 	return nil
 }
 
-func (user *User) cleanBorderSpaces() {
+func (user *User) format(stage string) error {
 	user.Name = strings.TrimSpace(user.Name)
 	user.Username = strings.TrimSpace(user.Username)
 	user.Email = strings.TrimSpace(user.Email)
+
+	if stage == "create" {
+		passwordWithHash, err := security.Hash(user.Password)
+		if err != nil {
+			return err
+		}
+
+		user.Password = string(passwordWithHash)
+	}
+
+	return nil
 }
